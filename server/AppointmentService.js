@@ -9,6 +9,10 @@ function make(req, res) {
       else if (tutor.appointments.flat().indexOf(req.body.appointment[0])>=0 || tutor.appointments.flat().indexOf(req.body.appointment[0]-1800000)>=0 || tutor.appointments.flat().indexOf(req.body.appointment[0]+1800000)>=0) res.json({success: false});
       else if (req.user.appointments.flat().indexOf(req.body.appointment[0])>=0 || req.user.appointments.flat().indexOf(req.body.appointment[0]-1800000)>=0 || req.user.appointments.flat().indexOf(req.body.appointment[0]+1800000)>=0) res.json({success: false});
       else{
+        tutor.appointments.push(req.body.appointment);
+        tutor.save();
+        req.user.appointments.push(req.body.appointment);
+        req.user.save();
         var appointment = req.body.appointment;
         const serviceAccountAuth = new google.auth.GoogleAuth({
           keyFile: './config/ServiceAccountCredentials.json',
@@ -72,13 +76,13 @@ function make(req, res) {
         appointment[3] = event.data.id;
         appointment[4] = event.data.hangoutLink;
         var tempA = req.user.appointments || [];
-        tempA[tempA.length] = appointment;
+        tempA[tempA.length-1] = appointment;
         req.user.appointments = tempA.sort((a, b) => a[0] - b[0]);
         if(req.user.contacts.indexOf(appointment[2])) req.user.contacts.splice(0,0,appointment[2]);
         req.user.contacts = req.user.contacts.sort((a, b) => req.user.appointments.flat().indexOf(a) - req.user.appointments.flat().indexOf(b))
         req.user.save();
         tempA = tutor.appointments || [];
-        tempA[tempA.length] = appointment;
+        tempA[tempA.length-1] = appointment;
         tutor.appointments = tempA.sort((a, b) => a[0] - b[0]);
         if(tutor.contacts.indexOf(appointment[1])) tutor.contacts.splice(0,0,appointment[1]);
         tutor.contacts = tutor.contacts.sort((a, b) => tutor.appointments.flat().indexOf(a) - tutor.appointments.flat().indexOf(b))
