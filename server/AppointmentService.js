@@ -9,7 +9,6 @@ function make(req, res) {
       else if (tutor.appointments.flat().indexOf(req.body.appointment[0])>=0 || tutor.appointments.flat().indexOf(req.body.appointment[0]-1800000)>=0 || tutor.appointments.flat().indexOf(req.body.appointment[0]+1800000)>=0) res.json({success: false});
       else if (req.user.appointments.flat().indexOf(req.body.appointment[0])>=0 || req.user.appointments.flat().indexOf(req.body.appointment[0]-1800000)>=0 || req.user.appointments.flat().indexOf(req.body.appointment[0]+1800000)>=0) res.json({success: false});
       else{
-        res.json({success: true});
         var appointment = req.body.appointment;
         const serviceAccountAuth = new google.auth.GoogleAuth({
           keyFile: './config/ServiceAccountCredentials.json',
@@ -84,6 +83,7 @@ function make(req, res) {
         if(tutor.contacts.indexOf(appointment[1])) tutor.contacts.splice(0,0,appointment[1]);
         tutor.contacts = tutor.contacts.sort((a, b) => tutor.appointments.flat().indexOf(a) - tutor.appointments.flat().indexOf(b))
         tutor.save();
+        res.json({success: true});
         });
       }
     });
