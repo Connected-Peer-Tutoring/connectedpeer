@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
-import api from '../api';
+import api from '../../api';
 import UpdateUser from './UpdateUser';
-import MakeAppointment from './MakeAppointment';
+import MakeAppointment from '../appointments/MakeAppointment';
 
 class UserInfo extends Component {
     constructor(props) {

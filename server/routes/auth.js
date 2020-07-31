@@ -4,7 +4,7 @@ const router = express.Router()
 
 // @desc    Auth with Google
 // @route   GET /auth/google
-router.get('/google', passport.authenticate('google', { access_type: 'offline', scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }))
+router.get('/google', passport.authenticate('google', { accessType: 'offline', prompt: 'consent', scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }))
 
 // @desc    Google auth callback
 // @route   GET /auth/google/callback

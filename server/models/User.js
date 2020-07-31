@@ -43,6 +43,10 @@ const UserSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  contacts_data: {
+    type: Map,
+    default: new Map(),
+  },
   subjects:{
     type: Array,
     default:[],

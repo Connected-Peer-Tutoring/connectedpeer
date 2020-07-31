@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import M from 'materialize-css';
 import moment from 'moment';
-import api from '../api';
+import api from '../../api';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 

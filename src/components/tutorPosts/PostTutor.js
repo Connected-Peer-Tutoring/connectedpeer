@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import api from '../api';
+import api from '../../api';
 
 class PostTutor extends Component {
     constructor(props) {

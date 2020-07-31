@@ -6,12 +6,13 @@ import "../App.css";
 import api from '../api';
 
 import Navbar from "./layout/Navbar"
-import Dashboard from './Dashboard';
-import PostTutor from './PostTutor';
-import UserInfoWithRouter from './UserInfo';
-import ShowAppointments from './ShowAppointments';
-import TutorSearch from './TutorSearch';
-import Tutorial from './Tutorial';
+import Dashboard from './user/Dashboard';
+import PostTutor from './tutorPosts/PostTutor';
+import UserInfoWithRouter from './user/UserInfo';
+import ShowAppointments from './appointments/ShowAppointments';
+import TutorSearch from './tutorPosts/TutorSearch';
+import Tutorial from './user/Tutorial';
+import ChatWithRouter from './chat/Chat';
 
 class Home extends Component {
   constructor() {
@@ -54,6 +55,12 @@ class Home extends Component {
         )} />
         <Route path="/user/:userId" render = {() =>(
           <UserInfoWithRouter
+            user_data={this.state.user_data}
+            updateState={this.updateState}
+          />
+        )}/>
+        <Route path="/chat/:roomId" render = {() =>(
+          <ChatWithRouter
             user_data={this.state.user_data}
             updateState={this.updateState}
           />

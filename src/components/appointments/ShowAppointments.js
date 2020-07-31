@@ -40,8 +40,8 @@ class ShowAppointments extends Component {
         if(this.props.user_data.appointments.length > 0) return(
             <div>
                 <h5>Future Appointments:</h5>
-                {this.props.user_data.appointments.map((v,i,ar) => {
-                    return <ShowAppointment user_data={this.props.user_data} appointment={v} updateChosenAppointment={this.updateChosenAppointment}/>
+                {this.props.user_data.appointments.map((v,i) => {
+                    return <ShowAppointment key={i} user_data={this.props.user_data} appointment={v} updateChosenAppointment={this.updateChosenAppointment}/>
                 })}
                 <CancelAppointment user_data={this.state.user_data} appointment={this.state.appointment} updateState={this.props.updateState}/>
             </div>

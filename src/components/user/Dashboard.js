@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ShowAppointments from './ShowAppointments';
+import ShowAppointments from '../appointments/ShowAppointments';
 
 class Dashboard extends Component {
     render(){
@@ -25,7 +25,7 @@ class Dashboard extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col s12 xl6 offset-xl3">
+                    <div className="col s12 xl8 offset-xl2">
                         <h4 className="primary-color">Welcome {this.props.user_data.displayName}</h4>
                         <div>You have volunteered for: {this.props.user_data.hours} hours</div>
                         <div>Current Goal: {goal} hours</div>
@@ -35,10 +35,10 @@ class Dashboard extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col s12 xl3 offset-xl3">
+                    <div className="col s12 xl4 offset-xl2">
                         <ShowAppointments user_data={this.props.user_data} updateState={this.props.updateState}/>
                     </div>
-                    <div className="col s12 xl3">
+                    <div className="col s12 xl4">
                         <h5>Get started:</h5>
                         <div className="card-panel flex-container">
                             <h5 className="cyan-text space-between">Learn as a peer student<a className="waves-effect waves-light btn-large cyan" href="/learn"><i className="material-icons">trending_up</i></a></h5>

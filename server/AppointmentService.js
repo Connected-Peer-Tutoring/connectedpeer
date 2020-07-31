@@ -1,5 +1,6 @@
 const User = require('./models/User')
 const {google} = require('googleapis');
+const UserService = require('./UserService')
 
 function make(req, res) {
   try{
@@ -68,7 +69,7 @@ function make(req, res) {
           sendNotifications: true,
           resource: event,
           auth: oAuth2Client,
-        }, function(err, event) {
+        }, async function(err, event) {
         if (err) {
           console.log('There was an error contacting the Calendar service: ' + err);
           return res.json({success: false});
@@ -78,16 +79,17 @@ function make(req, res) {
         var tempA = req.user.appointments || [];
         tempA[tempA.length-1] = appointment;
         req.user.appointments = tempA.sort((a, b) => a[0] - b[0]);
-        if(req.user.contacts.indexOf(appointment[2])) req.user.contacts.splice(0,0,appointment[2]);
-        req.user.contacts = req.user.contacts.sort((a, b) => req.user.appointments.flat().indexOf(a) - req.user.appointments.flat().indexOf(b))
+        if(req.user.contacts.indexOf(appointment[2].toString())<0) req.user.contacts.unshift(appointment[2]);
+        req.user.contacts = req.user.contacts.sort((a, b) => 2**(-1*req.user.appointments.flat().indexOf(a)) - 2**(-1*req.user.appointments.flat().indexOf(b)))
         req.user.save();
         tempA = tutor.appointments || [];
         tempA[tempA.length-1] = appointment;
         tutor.appointments = tempA.sort((a, b) => a[0] - b[0]);
-        if(tutor.contacts.indexOf(appointment[1])) tutor.contacts.splice(0,0,appointment[1]);
-        tutor.contacts = tutor.contacts.sort((a, b) => tutor.appointments.flat().indexOf(a) - tutor.appointments.flat().indexOf(b))
+        if(tutor.contacts.indexOf(appointment[1].toString())<0) tutor.contacts.unshift(appointment[1]);
+        tutor.contacts = tutor.contacts.sort((a, b) => 2**(-1*tutor.appointments.flat().indexOf(a)) - 2**(-1*tutor.appointments.flat().indexOf(b)))
         tutor.save();
         res.json({success: true});
+        UserService.updateContactsData(req, res);
         });
       }
     });

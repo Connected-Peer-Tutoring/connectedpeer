@@ -29,7 +29,7 @@ export default function TutorSearchHelper(props) {
             if (tutors.length === index + 1) {
                 return <div ref={lastTutorElementRef}><TutorResult tutor={tutor} time={props.query.time} user_data={props.user_data} updateState={props.updateState}/></div>
             } else {
-                return <TutorResult tutor={tutor} time={props.query.time} user_data={props.user_data} updateState={props.updateState}/>
+                return <TutorResult key={tutor} tutor={tutor} time={props.query.time} user_data={props.user_data} updateState={props.updateState}/>
             }
         })}
         <div>{(loading)?<div className="center"><div className="preloader-wrapper big active"><div className="spinner-layer spinner-blue-only"><div className="circle-clipper left"><div className="circle"></div></div><div className="gap-patch"><div className="circle"></div></div><div className="circle-clipper right"><div className="circle"></div></div></div></div></div>:null}</div>

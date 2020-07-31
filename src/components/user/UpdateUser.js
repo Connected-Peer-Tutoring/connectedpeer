@@ -5,7 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import api from '../api';
+import api from '../../api';
 
 class UpdateUser extends Component {
     constructor(props) {

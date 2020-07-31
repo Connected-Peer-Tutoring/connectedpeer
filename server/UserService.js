@@ -4,29 +4,6 @@ async function get(req, res) {
   try {
     var logged_in = req.isAuthenticated()
     if(logged_in){
-      var contacts = [];
-      var i = 0; 
-      const getContacts = async _ => {
-        while (contacts.length < req.user.contacts.length){
-          if(i === req.user.contacts.length) break;
-          await User.findById(req.user.contacts[i], (err, user) => {
-            if (err) {
-              console.log(err);
-            } else {
-              const contact_data = {
-                _id: user._id,
-                displayName: user.displayName,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                image: user.image,
-              }
-              contacts.push(contact_data);
-            }
-          })
-          i++;
-        }
-      }
-      await getContacts();
       var userTA = req.user.tutorAvailability
       while(true){
         if(userTA.length===0) break;
@@ -57,17 +34,45 @@ async function get(req, res) {
         image: req.user.image,
         hours: req.user.hours,
         grade: req.user.grade,
-        contacts: contacts,
+        contacts: req.user.contacts,
+        contacts_data: req.user.contacts_data,
         subjects: req.user.subjects,
         bio: req.user.bio,
         tutorAvailability: userTA,
         appointments: req.user.appointments,
       }
-      res.json(user_data)
+      res.json(user_data);
+      updateContactsData(req, res);
     } else res.json({})
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.status(500).send(err);
+  }
+}
+
+async function updateContactsData(req, res) {
+  try {
+    var i = 0; 
+    while (i < req.user.contacts.length){
+      if(i === req.user.contacts.length) break;
+      await User.findById(req.user.contacts[i], (err, user) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const contact_data = {
+            displayName: user.displayName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            image: user.image,
+          }
+          req.user.contacts_data.set(user._id.toString(), contact_data);
+        }
+      })
+      i++;
+    }
+    req.user.save();
+  } catch (err) {
+    console.log(err)
   }
 }
 
@@ -156,4 +161,4 @@ function update(req, res) {
   }
 }
 
-module.exports = { get, getPastAppointments, getWithID, update };
+module.exports = { get, updateContactsData, getPastAppointments, getWithID, update };

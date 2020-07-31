@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import api from '../api';
+import api from '../../api';
 import moment from 'moment';
 
 class ShowAppointment extends Component {

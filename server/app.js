@@ -18,6 +18,9 @@ require('./config/passport')(passport)
 connectDB()
 
 const app = express()
+const server = require("http").createServer(app)
+
+const io = require("socket.io")(server)
 
 // Body parser
 app.use(express.urlencoded({ extended: false }))
@@ -56,6 +59,17 @@ app.use(
   })
 )
 
+// Socket io config
+io.on("connection", socket => {
+
+  socket.on("connectToRoom", (room) => {
+    socket.join(room)
+    console.log(room)
+    socket.emit("message", "Hello World")
+  })
+
+})
+
 // Passport middleware
 app.use(passport.initialize())
 app.use(passport.session())
@@ -72,10 +86,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Routes
 app.use('/api', require('./routes/index'))
 app.use('/auth', require('./routes/auth'))
+app.use('/chat', require('./routes/chat'))
 
+// Port
 const PORT = process.env.PORT || 3001
 
-app.listen(
+server.listen(
   PORT,
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 )

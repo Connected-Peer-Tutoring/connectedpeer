@@ -29,12 +29,15 @@ class Sidebar extends Component {
                     <li><a className="waves-effect waves-green" href="/volunteer">Volunteer as a Tutor</a></li>
                     <li><div className="divider"></div></li>
                     <li><a className="subheader" href="#!">Contacts:</a></li>
-                    {this.props.user_data.contacts.map((contact, i, ar) => {
+                    {this.props.user_data.contacts.map((contact, i) => {
+                        let contactsMap = new Map();
+                        Object.keys(this.props.user_data.contacts_data).forEach( k => { contactsMap.set(k, this.props.user_data.contacts_data[k]) });
+                        console.log(contactsMap)
                         return (
-                            <li><a className="waves-effect waves-green" href={"/user/"+contact._id}>
+                            <li key={i}><a className="waves-effect waves-green" href={"/user/"+contact}>
                                 <div className="row center">
-                                    <div className="col s2"><Avatar variant="square" className="avatar-helper" src={contact.image} alt={contact.firstName+"'s pfp"}/></div>
-                                    <div className="col s10">{contact.displayName}</div>
+                                    <div className="col s2"><Avatar variant="square" className="avatar-helper" src={contactsMap.get(contact).image} alt={contactsMap.get(contact).firstName+"'s pfp"}/></div>
+                                    <div className="col s10">{contactsMap.get(contact).displayName}</div>
                                 </div>
                             </a></li>
                         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import api from '../api';
-import MakeAppointment from './MakeAppointment';
+import api from '../../api';
+import MakeAppointment from '../appointments/MakeAppointment';
 
 class TutorResult extends Component {
     constructor(props) {
