@@ -1,5 +1,5 @@
 p {
-    margin: 10px 0 !important;
+  margin: 10px 0 !important;
 }
 
 .login-container {
@@ -36,7 +36,7 @@ div.flex-container {
   flex: 1;
 }
 
-.space-between{
+.space-between {
   display: flex;
   justify-content: space-between;
 }

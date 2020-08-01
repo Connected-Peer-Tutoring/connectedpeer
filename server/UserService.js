@@ -1,4 +1,5 @@
 const User = require('./models/User')
+const ChatRoom = require('./models/ChatRoom')
 
 async function get(req, res) {
   try {
@@ -55,17 +56,31 @@ async function updateContactsData(req, res) {
     var i = 0; 
     while (i < req.user.contacts.length){
       if(i === req.user.contacts.length) break;
-      await User.findById(req.user.contacts[i], (err, user) => {
+      await User.findById(req.user.contacts[i], async (err, user) => {
         if (err) {
           console.log(err);
         } else {
-          const contact_data = {
-            displayName: user.displayName,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            image: user.image,
+          if (!req.user.contacts_data.has(user._id.toString())) {
+            let chatRoom = await ChatRoom.findOne({members: [user._id.toString(), req.user._id.toString()]})
+            if (!chatRoom) chatRoom = await ChatRoom.create({members: [req.user._id.toString(), user._id.toString()]})
+            const contact_data = {
+              displayName: user.displayName,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              image: user.image,
+              chatRoom: await chatRoom._id,
+            }
+            req.user.contacts_data.set(user._id.toString(), contact_data);
+          } else {
+            const contact_data = {
+              displayName: user.displayName,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              image: user.image,
+              chatRoom: req.user.contacts_data.get(user._id.toString()).chatRoom,
+            }
+            req.user.contacts_data.set(user._id.toString(), contact_data);
           }
-          req.user.contacts_data.set(user._id.toString(), contact_data);
         }
       })
       i++;

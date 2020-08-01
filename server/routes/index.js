@@ -1,16 +1,16 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const UserService = require('../UserService')
-const TutorService = require('../TutorService')
-const AppointmentService = require('../AppointmentService')
+const UserService = require('../UserService');
+const TutorService = require('../TutorService');
+const AppointmentService = require('../AppointmentService');
 
 // returns logged_in boolean
 router.get('/', async (req, res) => {
   try {
-    res.json(req.isAuthenticated())
+    res.json(req.isAuthenticated());
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.status(500).send(err);
   }
 });
@@ -48,11 +48,11 @@ router.post('/getTutors', async (req, res) => {
 // makes appointment
 router.post('/makeAppointment', async (req, res) => {
   AppointmentService.make(req, res);
-})
+});
 
 // cancels appointment
 router.post('/cancelAppointment', async (req, res) => {
   AppointmentService.cancel(req, res);
-})
+});
 
-module.exports = router
+module.exports = router;

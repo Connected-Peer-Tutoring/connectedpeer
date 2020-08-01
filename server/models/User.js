@@ -1,76 +1,76 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   googleId: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
-    required: true,
+    required: true
   },
   accessToken: {
-    type: String,
+    type: String
   },
   refreshToken: {
-    type: String,
+    type: String
   },
   displayName: {
     type: String,
-    required: true,
+    required: true
   },
   firstName: {
     type: String,
-    required: true,
+    required: true
   },
   lastName: {
     type: String,
-    required: true,
+    required: true
   },
   image: {
     type: String,
-    required: true,
+    required: true
   },
   hours: {
     type: Number,
-    default: 0,
+    default: 0
   },
   grade: {
     type: Number,
-    default: 0,
+    default: 0
   },
   contacts: {
     type: Array,
-    default: [],
+    default: []
   },
   contacts_data: {
     type: Map,
-    default: new Map(),
+    default: new Map()
   },
-  subjects:{
+  subjects: {
     type: Array,
-    default:[],
+    default: []
   },
-  bio:{
+  bio: {
     type: String,
-    default: '',
+    default: ''
   },
-  tutorAvailability:{
+  tutorAvailability: {
     type: Array,
-    default: [],
+    default: []
   },
-  appointments:{
+  appointments: {
     type: Array,
-    default: [],
+    default: []
   },
-  pastAppointments:{
+  pastAppointments: {
     type: Array,
-    default: [],
+    default: []
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
-})
+    default: Date.now
+  }
+});
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema);

@@ -1,18 +1,18 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const TutorTimesSchema = new mongoose.Schema({
   time: {
     type: Date,
-    required: true,
+    required: true
   },
   tutors: {
     type: Array,
-    default: [],
+    default: []
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
-})
+    default: Date.now
+  }
+});
 
-module.exports = mongoose.model('TutorTimes', TutorTimesSchema)
+module.exports = mongoose.model('TutorTimes', TutorTimesSchema);
