@@ -2,23 +2,18 @@
 
 > ConnectedPeer App
 
+This app uses Node.js/Express/MongoDB
+
 ## Usage
 
+Add your config.env and Service Account credentials file
+
 ```
-# Run react
 # Install dependencies
 npm install
 
-# Run in production
-npm start
-```
-
-```
-# Run server
-cd server
-
-# Install dependencies
-npm install
+# Run in develpment
+npm run dev
 
 # Run in production
 npm start
