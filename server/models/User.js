@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema({
     type: Map,
     default: new Map()
   },
+  chat_passwords: {
+    type: Map,
+    default: new Map()
+  },
   subjects: {
     type: Array,
     default: []

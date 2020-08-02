@@ -64,7 +64,8 @@ io.on('connection', (socket) => {
   socket.on('connectToRoom', (room) => {
     socket.join(room);
     console.log(room);
-    socket.emit('message', 'Hello World');
+    // socket.emit('accessDenied', 'Hello World');
+    socket.emit('newMessage', 'Hello World');
   });
 });
 

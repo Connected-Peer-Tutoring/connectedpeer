@@ -28,6 +28,7 @@ class MakeAppointment extends Component {
 
     if (this.state.waiting) return this.setState({ openErrWait: true });
 
+    // appointment array in order: [time, student id, tutor id, calendar event id, google meet id, jamboard id, attended boolean]
     const newAppointment = {
       appointment: [
         this.props.appointment_time,

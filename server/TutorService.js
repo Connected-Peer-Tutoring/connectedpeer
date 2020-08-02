@@ -1,8 +1,10 @@
 const TutorTimes = require('./models/TutorTimes');
 const User = require('./models/User');
 
+// posts tutor availability; creates new tutor time object if first post for time
 async function post(req, res) {
   try {
+    // updates user subjects and bio info
     req.user.subjects = req.body.subjects.sort(
       (a, b) => SubjectList.indexOf(a) - SubjectList.indexOf(b)
     );
@@ -34,6 +36,7 @@ async function post(req, res) {
   }
 }
 
+// returns tutor search result by page, subject, and time availabilty
 async function getTutors(req, res) {
   try {
     var tutorIDs = [];

@@ -19,16 +19,22 @@ class Chat extends Component {
     const roomId = await this.props.match.params.roomId;
     this.setState({ roomId: roomId });
 
+    console.log(roomId);
+    console.log(await this.props.user_data.chat_passwords[roomId]);
+
     let server = 'http://localhost:3001';
 
     this.socket = io(server);
 
-    console.log(roomId);
-
     this.socket.emit('connectToRoom', roomId);
     console.log('connected');
 
-    this.socket.on('message', (messageFromServer) => {
+    this.socket.on('accessDenied', (messageFromServer) => {
+      console.log(messageFromServer);
+      window.location.href = '/chat';
+    });
+
+    this.socket.on('newMessage', (messageFromServer) => {
       console.log(messageFromServer);
     });
   }
@@ -91,13 +97,13 @@ class Chat extends Component {
               href='#Send'
               className='btn waves-effect waves-light blue'
               style={{ margin: '0.5em' }}>
-              <i class='material-icons'>send</i>
+              <i className='material-icons'>send</i>
             </a>
             <a
               href='#Send'
               className='btn-floating btn waves-effect waves-light blue'
               style={{ margin: '0.5em' }}>
-              <i class='material-icons'>attach_file</i>
+              <i className='material-icons'>attach_file</i>
             </a>
           </div>
         </div>

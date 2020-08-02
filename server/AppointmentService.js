@@ -1,4 +1,5 @@
 const User = require('./models/User');
+const TutorTimes = require('./models/TutorTimes');
 const { google } = require('googleapis');
 const UserService = require('./UserService');
 
@@ -27,6 +28,7 @@ function make(req, res) {
       )
         res.json({ success: false });
       else {
+        // creates temporary appointments with basic info to prevent double appointments
         tutor.appointments.push(req.body.appointment);
         if (tutor.contacts.indexOf(req.body.appointment[1].toString()) < 0)
           tutor.contacts.unshift(req.body.appointment[1]);
@@ -35,9 +37,19 @@ function make(req, res) {
         if (req.user.contacts.indexOf(req.body.appointment[2].toString()) < 0)
           req.user.contacts.unshift(req.body.appointment[2]);
         await req.user.save();
-        await UserService.updateContactsData(req, res);
+        // updates users' contact information
+        await UserService.updateContactsData(req.user);
+        UserService.updateContactsData(tutor);
         res.json({ success: true });
+        // removes tutor from tutor time, making tutor search query more efficient
+        let tutorTime = await TutorTimes.findOne({
+          time: req.body.appointment[0]
+        });
+        tutorTime.tutors.filter((v) => v !== req.body.appointment[2]);
+        tutorTime.save();
+        // appointment array in order: [time, student id, tutor id, calendar event id, google meet id, jamboard id, attended boolean]
         var appointment = req.body.appointment;
+        // makes google jamboard via service account
         const serviceAccountAuth = new google.auth.GoogleAuth({
           keyFile: './config/ServiceAccountCredentials.json',
           scopes: ['https://www.googleapis.com/auth/drive']
@@ -64,6 +76,7 @@ function make(req, res) {
           resource: sharingPerm,
           auth: serviceAccountAuth
         });
+        // makes calendar event via student's google calendar credentials
         const oAuth2Client = new google.auth.OAuth2(
           process.env.GOOGLE_CLIENT_ID,
           process.env.GOOGLE_CLIENT_SECRET
@@ -119,6 +132,7 @@ function make(req, res) {
               );
               return res.json({ success: false });
             }
+            // updates appointment informations with google information
             appointment[3] = event.data.id;
             appointment[4] = event.data.hangoutLink;
             var tempA = req.user.appointments || [];
@@ -151,6 +165,7 @@ function make(req, res) {
 
 async function cancel(req, res) {
   try {
+    // gets other user by id
     var otherUserID =
       req.body[1].toString() === req.user._id.toString()
         ? req.body[2]
@@ -158,6 +173,7 @@ async function cancel(req, res) {
     User.findById(otherUserID, async (err, user) => {
       if (err) res.json({ success: false });
       else {
+        // cancels google calender event
         const oAuth2Client = new google.auth.OAuth2(
           process.env.GOOGLE_CLIENT_ID,
           process.env.GOOGLE_CLIENT_SECRET
@@ -175,6 +191,7 @@ async function cancel(req, res) {
             sendNotifications: true
           })
           .catch((err) => console.log(err));
+        // deletes appointment from users' data
         var i = 0;
         while (i < req.user.appointments.length) {
           if (req.user.appointments[i][0] === req.body[0]) break;
@@ -185,7 +202,7 @@ async function cancel(req, res) {
           0,
           req.user.appointments.splice(i, 1)
         );
-        req.user.save();
+        await req.user.save();
         i = 0;
         while (i < user.appointments.length) {
           if (user.appointments[i][0] === req.body[0]) break;
@@ -194,6 +211,12 @@ async function cancel(req, res) {
         user.pastAppointments.splice(0, 0, user.appointments.splice(i, 1));
         user.save();
         res.json({ success: true });
+        // adds tutor back into end of tutor times for futur tutor search query
+        let tutorTime = await TutorTimes.findOne({
+          time: req.body.appointment[0]
+        });
+        tutorTime.push(req.body[2]);
+        tutorTime.save();
       }
     });
   } catch (err) {

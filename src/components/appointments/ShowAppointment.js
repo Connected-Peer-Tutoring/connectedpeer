@@ -7,7 +7,7 @@ class ShowAppointment extends Component {
     super(props);
 
     this.state = {
-      user_data: {},
+      userId: null,
       tutor: null
     };
   }
@@ -16,18 +16,14 @@ class ShowAppointment extends Component {
     if (
       (await this.props.appointment[1]) === (await this.props.user_data._id)
     ) {
-      api.getUserWithId(this.props.appointment[2]).then((json) => {
-        this.setState({ user_data: json, tutor: false });
-      });
+      this.setState({ userId: this.props.appointment[2], tutor: false });
     } else {
-      api.getUserWithId(this.props.appointment[1]).then((json) => {
-        this.setState({ user_data: json, tutor: true });
-      });
+      this.setState({ userId: this.props.appointment[1], tutor: false });
     }
   }
 
   render() {
-    if (this.state.tutor === null) {
+    if (!this.state.userId || !this.props.user_data.contacts_data) {
       return (
         <div className='center'>
           <div className='preloader-wrapper big active'>
@@ -50,10 +46,14 @@ class ShowAppointment extends Component {
       <div className={this.state.tutor ? 'card-panel teal' : 'card-panel cyan'}>
         <div className='row'>
           <div className='col s12 xl6'>
-            <a href={'/user/' + this.state.user_data._id}>
+            <a href={'/user/' + this.state.userId}>
               <h5 className='white-text'>
                 <strong>
-                  Appointment with {this.state.user_data.displayName}
+                  Appointment with{' '}
+                  {
+                    this.props.user_data.contacts_data[this.state.userId]
+                      .displayName
+                  }
                 </strong>
               </h5>
             </a>
@@ -66,12 +66,16 @@ class ShowAppointment extends Component {
           <div className='col s12 xl6'>
             <a
               className='waves-effect white-text'
-              href={'/user/' + this.state.user_data._id}>
+              href={
+                '/user/' +
+                this.props.user_data.contacts_data[this.state.userId]._id
+              }>
               <h5 className='white-text'>
                 Tutor:{' '}
                 {this.state.tutor
                   ? this.props.user_data.displayName
-                  : this.state.user_data.displayName}
+                  : this.props.user_data.contacts_data[this.state.userId]
+                      .displayName}
               </h5>
             </a>
           </div>
@@ -84,7 +88,10 @@ class ShowAppointment extends Component {
                   : 'waves-effect btn white cyan-text'
               }
               style={{ margin: '0.5em' }}
-              href='#send'>
+              href={
+                '/chat/' +
+                this.props.user_data.contacts_data[this.state.userId].chatRoom
+              }>
               Chat<i className='material-icons right'>chat</i>
             </a>{' '}
             <a
@@ -124,7 +131,7 @@ class ShowAppointment extends Component {
               onClick={() =>
                 this.props.updateChosenAppointment(
                   this.props.appointment,
-                  this.state.user_data
+                  this.props.user_data.contacts_data[this.state.userId]
                 )
               }>
               Cancel <i className='material-icons right'>delete_forever</i>
