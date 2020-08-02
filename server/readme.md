@@ -6,7 +6,7 @@ This app uses Node.js/Express/MongoDB
 
 ## Usage
 
-Add your mongoDB URI and Google credentials to the config.env file
+Add your config.env and Service Account credentials file
 
 ```
 # Install dependencies

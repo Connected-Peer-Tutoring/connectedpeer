@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon app"
   },
   "author": "Joseph Kim",
-  "license": "MIT",
+  "license": "GNU",
   "dependencies": {
     "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
