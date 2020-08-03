@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const TutorTimesSchema = new mongoose.Schema({
   time: {
     type: Date,
-    required: true
+    required: true,
+    index: true
   },
   tutors: {
     type: Array,

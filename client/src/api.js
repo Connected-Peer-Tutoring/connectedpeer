@@ -84,6 +84,26 @@ const api = {
           reject(err);
         });
     });
+  },
+  getChats() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseAPI}/chat`)
+        .then((response) => resolve(response.data))
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  getMessages(chatRoom) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseAPI}/chat/${chatRoom}`)
+        .then((response) => resolve(response.data))
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 };
 

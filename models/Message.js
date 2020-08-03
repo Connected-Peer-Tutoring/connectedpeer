@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
+  chatRoom: {
+    type: String,
+    required: true,
+    index: true
+  },
   message: {
-    type: String
+    type: String,
+    required: true
   },
   sender: {
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   },
   type: {
-    type: String
+    type: String,
+    required: true
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: Date
   }
 });
 

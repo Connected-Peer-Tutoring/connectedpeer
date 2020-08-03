@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 const ChatRoomSchema = new mongoose.Schema({
   password: {
-    type: String
+    type: String,
+    required: true
   },
   members: {
-    type: [String]
+    type: [String],
+    required: true
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    required: true
   }
 });
 

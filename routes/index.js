@@ -4,6 +4,7 @@ const router = express.Router();
 const UserService = require('../UserService');
 const TutorService = require('../TutorService');
 const AppointmentService = require('../AppointmentService');
+const ChatService = require('../ChatService');
 
 // returns logged_in boolean
 router.get('/', async (req, res) => {
@@ -53,6 +54,20 @@ router.post('/makeAppointment', async (req, res) => {
 // cancels appointment
 router.post('/cancelAppointment', async (req, res) => {
   AppointmentService.cancel(req, res);
+});
+
+// returns chat rooms
+router.get('/chat', async (req, res) => {
+  try {
+    ChatService.getChats(req, res);
+  } catch (err) {}
+});
+
+// gets messages in chat room
+router.get('/chat/:roomId', async (req, res) => {
+  try {
+    ChatService.getMessages(req, res);
+  } catch (err) {}
 });
 
 module.exports = router;

@@ -8,7 +8,9 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const connectDB = require('./config/db');
+
 const ChatRoom = require('./models/ChatRoom');
+const Message = require('./models/Message');
 
 // Load config
 dotenv.config({ path: './config/config.env' });
@@ -60,20 +62,6 @@ app.use(
   })
 );
 
-// Socket io config
-io.on('connection', (socket) => {
-  socket.on('connectToRoom', (room, password) => {
-    ChatRoom.findById(room, (err, chatRoom) => {
-      if (!chatRoom || chatRoom.password !== password)
-        socket.emit('accessDenied', 'Access Denied');
-      else {
-        socket.join(room);
-        socket.emit('newMessage', { message: 'Hello World' });
-      }
-    });
-  });
-});
-
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -90,7 +78,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/api', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
-app.use('/chat', require('./routes/chat'));
+
+// Socket io config
+io.on('connection', (socket) => {
+  socket.on('connectToRoom', (room, password) => {
+    ChatRoom.findById(room, (err, chatRoom) => {
+      if (!chatRoom || chatRoom.password !== password)
+        socket.emit('accessDenied', 'Access Denied');
+      else {
+        socket.join(room);
+      }
+    });
+  });
+
+  socket.on('newMessageFromUser', (message) => {
+    console.log(message);
+    socket.to(message.chatRoom).broadcast.emit('newMessage', message);
+    let newMessage = Message.create({
+      chatRoom: message.chatRoom,
+      message: message.message,
+      sender: message.sender,
+      type: message.type,
+      createdAt: new Date(message.createdAt)
+    });
+    console.log(newMessage);
+  });
+});
 
 // Port
 const PORT = process.env.PORT || 3001;
