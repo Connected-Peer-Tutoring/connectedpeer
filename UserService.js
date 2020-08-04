@@ -51,7 +51,6 @@ async function get(req, res) {
         appointments: req.user.appointments
       };
       res.json(user_data);
-      updateContactsData(req.user, () => {});
     } else res.json({});
   } catch (err) {
     console.error(err);
@@ -60,10 +59,8 @@ async function get(req, res) {
 }
 
 function updateContactsData(user, callback) {
-  try {
-    var i = 0;
-    while (i < user.contacts.length) {
-      if (i === user.contacts.length) break;
+  function getContactData(i) {
+    return new Promise((res) => {
       User.findById(user.contacts[i], async (err, contact) => {
         if (err) {
           console.log(err);
@@ -87,9 +84,12 @@ function updateContactsData(user, callback) {
               image: contact.image,
               chatRoom: chatRoom._id
             };
-            user.chat_passwords.set(chatRoom._id.toString(), chatRoom.password);
-            user.contacts_data.set(contact._id.toString(), contact_data);
-            user.save();
+            await user.chat_passwords.set(
+              chatRoom._id.toString(),
+              chatRoom.password
+            );
+            await user.contacts_data.set(contact._id.toString(), contact_data);
+            res();
           } else {
             // updates contact data
             const contact_data = {
@@ -97,21 +97,32 @@ function updateContactsData(user, callback) {
               firstName: contact.firstName,
               lastName: contact.lastName,
               image: contact.image,
-              chatRoom: user.contacts_data.get(contact._id.toString()).chatRoom
+              chatRoom: await user.contacts_data.get(contact._id.toString())
+                .chatRoom
             };
             if (user.contact_data !== contact_data) {
-              user.contacts_data.set(contact._id.toString(), contact_data);
+              await user.contacts_data.set(
+                contact._id.toString(),
+                contact_data
+              );
+              res();
+            } else {
+              res();
             }
           }
         }
       });
-      i++;
-    }
-    user.save();
-    callback();
-  } catch (err) {
-    console.log(err);
+    });
   }
+
+  let promises = [];
+  for (var i = 0; i < user.contacts.length; i++) {
+    promises.push(getContactData(i));
+  }
+  Promise.all(promises).then(async () => {
+    await user.save();
+    callback();
+  });
 }
 
 // returns past appointments (not sent with normal user_data)
@@ -202,6 +213,11 @@ function update(req, res) {
     (req.user.tutorAvailability =
       req.body.tutorAvailability || req.user.tutorAvailability),
       req.user.save();
+    for (var i = 0; i < req.user.contacts; i++) {
+      User.findById(req.user.contacts[i], (err, user) => {
+        if (user) updateContactsData(user, () => {});
+      });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
