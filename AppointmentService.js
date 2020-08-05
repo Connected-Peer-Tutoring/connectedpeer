@@ -114,7 +114,8 @@ function make(req, res) {
             useDefault: false,
             overrides: [
               { method: 'email', minutes: 24 * 60 },
-              { method: 'popup', minutes: 10 }
+              { method: 'email', minutes: 15 },
+              { method: 'popup', minutes: 15 }
             ]
           },
           conferenceData: 'hangoutsMeet'
@@ -122,7 +123,7 @@ function make(req, res) {
         calendar.events.insert(
           {
             calendarId: 'primary',
-            sendNotifications: true,
+            sendUpdates: 'all',
             resource: event,
             auth: oAuth2Client
           },
@@ -189,7 +190,7 @@ async function cancel(req, res) {
             auth: oAuth2Client,
             calendarId: 'primary',
             eventId: req.body[3],
-            sendNotifications: true
+            sendUpdates: 'all'
           })
           .catch((err) => console.log(err));
         // deletes appointment from users' data
