@@ -211,8 +211,7 @@ class UpdateUser extends Component {
                             className='waves-effect waves-light'
                             href={'#' + v}
                             onClick={this.onChangeSubject}>
-                            {v + ' '}
-                            <i className='tiny material-icons'>clear</i>
+                            {v + ' ×'}
                           </a>
                         </span>
                       );
@@ -224,8 +223,7 @@ class UpdateUser extends Component {
                             className='waves-effect waves-light'
                             href={'#' + v}
                             onClick={this.onChangeSubject}>
-                            {v + ' '}
-                            <i className='tiny material-icons'>clear</i>
+                            {v + ' ×'}
                           </a>
                         </span>
                       );
@@ -255,8 +253,7 @@ class UpdateUser extends Component {
                             className='waves-effect waves-cyan btn-flat btn-small'
                             href={'#' + v}
                             onClick={this.onChangeTutorAvailability}>
-                            {t.format('h:mm A ')}
-                            <i className='tiny material-icons'>clear</i>
+                            {t.format('h:mm A ') + '×'}
                           </a>
                         </span>
                       </span>
@@ -275,8 +272,7 @@ class UpdateUser extends Component {
                               className='waves-effect waves-cyan btn-flat btn-small'
                               href={'#' + v}
                               onClick={this.onChangeTutorAvailability}>
-                              {t.format('h:mm A ')}
-                              <i className='tiny material-icons'>clear</i>
+                              {t.format('h:mm A ') + '×'}
                             </a>
                           </span>
                         </span>
@@ -288,8 +284,7 @@ class UpdateUser extends Component {
                             className='waves-effect waves-cyan btn-flat btn-small'
                             href={'#' + v}
                             onClick={this.onChangeTutorAvailability}>
-                            {t.format('h:mm A ')}
-                            <i className='tiny material-icons'>clear</i>
+                            {t.format('h:mm A ') + '×'}
                           </a>
                         </span>
                       );
