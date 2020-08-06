@@ -72,12 +72,28 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Static folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Routes
 app.use('/api', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
+
+// Static folder
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/login', express.static(path.join(__dirname, 'public')));
+app.use('/home', express.static(path.join(__dirname, 'public')));
+app.use('/tutorial', express.static(path.join(__dirname, 'public')));
+app.use('/learn', express.static(path.join(__dirname, 'public')));
+app.use('/volunteer', express.static(path.join(__dirname, 'public')));
+app.use('/appointments', express.static(path.join(__dirname, 'public')));
+app.use('/user', express.static(path.join(__dirname, 'public')));
+app.use('/user/:id', express.static(path.join(__dirname, 'public')));
+app.use('/chat', express.static(path.join(__dirname, 'public')));
+app.use('/chat/:id', express.static(path.join(__dirname, 'public')));
+
+// Handle 404 - Keep this as a last route
+app.set('view engine', 'ejs');
+app.use(function (req, res, next) {
+  res.render('Error404');
+});
 
 // Socket io config
 io.on('connection', (socket) => {
