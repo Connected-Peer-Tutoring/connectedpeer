@@ -13,7 +13,6 @@ import ShowAppointments from './appointments/ShowAppointments';
 import TutorSearch from './tutorPosts/TutorSearch';
 import Tutorial from './user/Tutorial';
 import ChatWithRouter from './chat/Chat';
-import Error404 from './Error404';
 
 class Home extends Component {
   constructor() {
