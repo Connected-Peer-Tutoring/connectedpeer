@@ -58,16 +58,12 @@ router.post('/cancelAppointment', async (req, res) => {
 
 // returns chat rooms
 router.get('/chat', async (req, res) => {
-  try {
-    ChatService.getChats(req, res);
-  } catch (err) {}
+  ChatService.getChats(req, res);
 });
 
 // gets messages in chat room
 router.get('/chat/:roomId', async (req, res) => {
-  try {
-    ChatService.getMessages(req, res);
-  } catch (err) {}
+  ChatService.getMessages(req, res);
 });
 
 module.exports = router;
