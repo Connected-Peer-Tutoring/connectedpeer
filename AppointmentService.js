@@ -38,10 +38,10 @@ function make(req, res) {
           req.user.contacts.unshift(req.body.appointment[2]);
         await req.user.save();
         // updates users' contact information
-        UserService.updateContactsData(tutor, () => {});
-        UserService.updateContactsData(req.user, () =>
-          res.json({ success: true })
-        );
+        UserService.updateContactsData(req.user, () => {
+          res.json({ success: true });
+          UserService.updateContactsData(tutor, () => {});
+        });
         // removes tutor from tutor time, making tutor search query more efficient
         let tutorTime = await TutorTimes.findOne({
           time: req.body.appointment[0]

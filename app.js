@@ -108,7 +108,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newMessageFromUser', (message) => {
-    console.log(message);
     socket.to(message.chatRoom).broadcast.emit('newMessage', message);
     let newMessage = Message.create({
       chatRoom: message.chatRoom,
@@ -117,7 +116,6 @@ io.on('connection', (socket) => {
       type: message.type,
       createdAt: new Date(message.createdAt)
     });
-    console.log(newMessage);
   });
 });
 

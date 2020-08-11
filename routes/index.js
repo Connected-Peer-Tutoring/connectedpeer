@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 
 const UserService = require('../UserService');
 const TutorService = require('../TutorService');
 const AppointmentService = require('../AppointmentService');
 const ChatService = require('../ChatService');
+const FileUploadService = require('../FileUploadService');
 
 // returns logged_in boolean
 router.get('/', async (req, res) => {
@@ -64,6 +66,19 @@ router.get('/chat', async (req, res) => {
 // gets messages in chat room
 router.get('/chat/:roomId', async (req, res) => {
   ChatService.getMessages(req, res);
+});
+
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage });
+
+// Upload pfp picture
+router.post('/profile-img-upload', upload.single('file'), async (req, res) => {
+  FileUploadService.postProfileImage(req, res);
+});
+
+// upload file for chat
+router.post('/file-upload', upload.single('file'), async (req, res) => {
+  FileUploadService.postFile(req, res);
 });
 
 module.exports = router;

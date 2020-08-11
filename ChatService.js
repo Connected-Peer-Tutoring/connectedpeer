@@ -17,9 +17,10 @@ async function getMessages(req, res) {
     req.isAuthenticated() &&
     chatRoom.members.indexOf(req.user._id.toString()) >= 0
   ) {
-    Message.find({ chatRoom: req.params.roomId }, (err, messages) => {
-      res.json(messages);
-    });
+    Message.find({ chatRoom: req.params.roomId })
+      .sort({ _id: -1 })
+      .limit(100)
+      .then((messages) => res.json(messages));
   }
 }
 

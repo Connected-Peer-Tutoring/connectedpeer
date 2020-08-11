@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import io from 'socket.io-client';
+import Dropzone from 'react-dropzone';
+import moment from 'moment';
 import Message from './Message';
 
 import api from '../../api';
@@ -11,6 +13,7 @@ class Chat extends Component {
 
     this.handleWrite = this.handleWrite.bind(this);
     this.submitChatMessage = this.submitChatMessage.bind(this);
+    this.onDrop = this.onDrop.bind(this);
 
     this.state = {
       roomId: null,
@@ -21,13 +24,14 @@ class Chat extends Component {
 
   async componentDidMount() {
     this.setState({ roomId: await this.props.match.params.roomId });
-    api.getMessages(await this.props.match.params.roomId).then((json) =>
+    api.getMessages(await this.props.match.params.roomId).then((json) => {
       this.setState({
         messages: [...json, ...this.state.messages].sort(
-          (a, b) => a.createdAt - b.createdAt
+          (a, b) =>
+            moment(a.createdAt).valueOf() - moment(b.createdAt).valueOf()
         )
-      })
-    );
+      });
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -42,21 +46,18 @@ class Chat extends Component {
         nextProps.match.params.roomId,
         nextProps.user_data.chat_passwords[nextProps.match.params.roomId]
       );
-      console.log('connected');
 
       this.socket.on('accessDenied', (messageFromServer) => {
-        console.log(messageFromServer);
         window.location.href = '/chat';
       });
 
       this.socket.on('newMessage', (messageFromServer) => {
         this.setState({
           messages: [...this.state.messages, messageFromServer].sort(
-            (a, b) => a.createdAt - b.createdAt
+            (a, b) =>
+              moment(a.createdAt).valueOf() - moment(b.createdAt).valueOf()
           )
         });
-        console.log(this.state.messages);
-        console.log(messageFromServer.message);
       });
     }
   }
@@ -65,37 +66,66 @@ class Chat extends Component {
     // this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   }
 
-  onDrop = (files) => {
-    console.log(files);
-  };
-
-  handleWrite = (e) => {
+  handleWrite(e) {
     this.setState({
       chatMessage: e.target.value
     });
-    console.log(this.state.chatMessage);
-  };
+  }
 
-  submitChatMessage = (e) => {
+  submitChatMessage(e) {
     e.preventDefault();
 
-    const newMessage = {
-      chatRoom: this.state.roomId,
-      message: this.state.chatMessage,
-      sender: this.props.user_data._id,
-      type: 'Text',
-      createdAt: new Date().valueOf()
-    };
+    if (this.state.chatMessage !== '') {
+      const newMessage = {
+        chatRoom: this.state.roomId,
+        message: this.state.chatMessage,
+        sender: this.props.user_data._id,
+        type: 'Text',
+        createdAt: new Date().valueOf()
+      };
 
-    this.socket.emit('newMessageFromUser', newMessage);
+      this.socket.emit('newMessageFromUser', newMessage);
 
-    this.setState({
-      chatMessage: '',
-      messages: [...this.state.messages, newMessage].sort(
-        (a, b) => a.createdAt - b.createdAt
-      )
-    });
-  };
+      this.setState({
+        chatMessage: '',
+        messages: [...this.state.messages, newMessage].sort(
+          (a, b) => a.createdAt - b.createdAt
+        )
+      });
+    }
+  }
+
+  onDrop(files) {
+    if (files.length > 0) {
+      let formData = new FormData();
+      formData.append('file', files[0]);
+
+      const config = {
+        header: { 'content-type': 'multipart/form-data' }
+      };
+
+      api.postNewFile(formData, config).then((json) => {
+        if (json.fileLink) {
+          const newMessage = {
+            chatRoom: this.state.roomId,
+            message: json.fileLink,
+            sender: this.props.user_data._id,
+            type: 'File',
+            createdAt: new Date().valueOf()
+          };
+
+          this.socket.emit('newMessageFromUser', newMessage);
+
+          this.setState({
+            chatMessage: '',
+            messages: [...this.state.messages, newMessage].sort(
+              (a, b) => a.createdAt - b.createdAt
+            )
+          });
+        }
+      });
+    }
+  }
 
   render() {
     if (!this.props.user_data._id) {
@@ -186,12 +216,18 @@ class Chat extends Component {
               style={{ margin: '0.5em' }}>
               <i className='material-icons'>send</i>
             </a>
-            <a
-              href='#Send'
-              className='btn-floating btn waves-effect waves-light blue'
-              style={{ margin: '0.5em' }}>
-              <i className='material-icons'>attach_file</i>
-            </a>
+            <Dropzone onDrop={this.onDrop} multiple={false}>
+              {({ getRootProps, getInputProps }) => (
+                <span {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <button
+                    className='btn-floating btn waves-effect waves-light blue'
+                    style={{ margin: '0.5em' }}>
+                    <i className='material-icons'>attach_file</i>
+                  </button>
+                </span>
+              )}
+            </Dropzone>
           </div>
         </div>
       </div>

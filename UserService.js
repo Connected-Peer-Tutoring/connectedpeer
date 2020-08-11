@@ -1,5 +1,4 @@
 const User = require('./models/User');
-const ChatRoom = require('./models/ChatRoom');
 
 async function get(req, res) {
   try {

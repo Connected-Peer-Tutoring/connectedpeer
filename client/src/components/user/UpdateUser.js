@@ -6,6 +6,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import api from '../../api';
+import ChangePFP from './ChangePFP';
 
 class UpdateUser extends Component {
   constructor(props) {
@@ -170,12 +171,16 @@ class UpdateUser extends Component {
     }
     return (
       <div>
+        <ChangePFP
+          user_data={this.props.user_data}
+          updateState={this.props.updateState}
+        />
         <div className='row'>
           <div className='col s12 xl6 offset-xl3'>
             <div className='card-panel grey lighten-5'>
               <div className='row'>
                 <div className='col s3 xl1'>
-                  <a href={'/user/' + this.props.user_data._id}>
+                  <a className='modal-trigger' href='#changePFPModal'>
                     <img
                       className='circle responsive-img'
                       alt={this.state.displayName + "'s pfp"}
@@ -205,7 +210,7 @@ class UpdateUser extends Component {
                     if (ar.length === 0) return null;
                     else if (i === 0)
                       return (
-                        <span>
+                        <span key={i}>
                           Subjects {this.state.firstName} can tutor:{' '}
                           <a
                             className='waves-effect waves-light'
@@ -217,7 +222,7 @@ class UpdateUser extends Component {
                       );
                     else
                       return (
-                        <span className='secondary-color'>
+                        <span className='secondary-color' key={i}>
                           ,{' '}
                           <a
                             className='waves-effect waves-light'

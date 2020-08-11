@@ -31,9 +31,13 @@ class UserInfo extends Component {
   }
 
   render() {
-    console.log(this.state.user_data);
     if (this.state.userId === 'update')
-      return <UpdateUser user_data={this.props.user_data} />;
+      return (
+        <UpdateUser
+          user_data={this.props.user_data}
+          updateState={this.props.updateState}
+        />
+      );
     if (this.state.user_data.user_dne) window.location.href = '/user/update';
     if (!this.state.user_data._id || !this.props.user_data._id) {
       return (
@@ -55,7 +59,12 @@ class UserInfo extends Component {
       );
     }
     if (this.state.userId === this.props.user_data._id)
-      return <UpdateUser user_data={this.props.user_data} />;
+      return (
+        <UpdateUser
+          user_data={this.props.user_data}
+          updateState={this.props.updateState}
+        />
+      );
     return (
       <div>
         <div className='row'>

@@ -104,6 +104,26 @@ const api = {
           reject(err);
         });
     });
+  },
+  postNewPFP(formData, config) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${baseAPI}/profile-img-upload`, formData, config)
+        .then((response) => resolve(response.data))
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  postNewFile(formData, config) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${baseAPI}/file-upload`, formData, config)
+        .then((response) => resolve(response.data))
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 };
 
