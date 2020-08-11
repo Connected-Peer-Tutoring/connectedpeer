@@ -33,7 +33,11 @@ class Tutorial extends Component {
                   src='https://www.youtube.com/embed/0sXyGG8-W7A'
                   frameborder='0'
                   allow='autoplay; encrypted-media'
-                  allowfullscreen></iframe>
+                  allowfullscreen='allowfullscreen'
+                  mozallowfullscreen='mozallowfullscreen'
+                  msallowfullscreen='msallowfullscreen'
+                  oallowfullscreen='oallowfullscreen'
+                  webkitallowfullscreen='webkitallowfullscreen'></iframe>
               </div>
               <div className='row'>
                 <div className='right'>
