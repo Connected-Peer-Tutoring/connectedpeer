@@ -30,7 +30,7 @@ class Tutorial extends Component {
                 <iframe
                   className='tutorial-video'
                   title='tutorial video'
-                  src='https://www.youtube.com/embed/dQw4w9WgXcQ'
+                  src='https://www.youtube.com/embed/0sXyGG8-W7A'
                   frameborder='0'
                   allow='autoplay; encrypted-media'
                   allowfullscreen></iframe>
