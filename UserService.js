@@ -18,6 +18,7 @@ async function get(req, res) {
       while (true) {
         if (userA.length === 0) break;
         if (userA[0][0] < new Date().getTime() - 3600000) {
+          if (userA[0][2] === req.user._id.toString()) req.user.hours++;
           userPA.splice(0, 0, userA.shift());
         } else break;
       }

@@ -40,6 +40,8 @@ class Home extends Component {
 
   render() {
     if (!this.state.logged_in) return <Redirect to={{ pathname: '/login' }} />;
+    if (this.state.user_data.grade === -1)
+      return <Redirect to={{ pathname: '/api/logout' }} />;
     return (
       <div>
         <Navbar user_data={this.state.user_data} />

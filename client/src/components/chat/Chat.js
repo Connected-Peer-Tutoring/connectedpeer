@@ -210,9 +210,8 @@ class Chat extends Component {
                   );
                 else
                   return (
-                    <div>
+                    <div key={i}>
                       <Message
-                        key={i}
                         time={v.createdAt}
                         senderIsMe={v.sender === this.props.user_data._id}
                         type={v.type}

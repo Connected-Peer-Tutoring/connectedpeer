@@ -14,7 +14,7 @@ import {
   image64toCanvasRef
 } from '../fileUtils/imageUtils';
 
-const imageMaxSize = 10000000; // bytes
+const imageMaxSize = 1000; // bytes
 const acceptedFileTypes =
   'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(',').map((item) => {
@@ -54,6 +54,7 @@ class ChangePFP extends Component {
       const currentFile = files[0];
       const currentFileType = currentFile.type;
       const currentFileSize = currentFile.size;
+      console.log(currentFileType);
       if (currentFileSize > imageMaxSize) {
         alert(
           'This file is not allowed. ' + currentFileSize + ' bytes is too large'
