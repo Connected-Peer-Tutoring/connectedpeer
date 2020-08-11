@@ -7,30 +7,41 @@ import Message from './Message';
 
 import api from '../../api';
 
+const imageMaxSize = 10000000; // bytes
+
 class Chat extends Component {
   constructor(props) {
     super(props);
 
     this.handleWrite = this.handleWrite.bind(this);
     this.submitChatMessage = this.submitChatMessage.bind(this);
-    this.onDrop = this.onDrop.bind(this);
+
+    this.verifyFile = this.verifyFile.bind(this);
+    this.handleOnDrop = this.handleOnDrop.bind(this);
 
     this.state = {
       roomId: null,
       chatMessage: '',
-      messages: []
+      messages: [],
+      waiting: false
     };
   }
 
   async componentDidMount() {
     this.setState({ roomId: await this.props.match.params.roomId });
-    api.getMessages(await this.props.match.params.roomId).then((json) => {
+    api.getMessages(await this.props.match.params.roomId).then(async (json) => {
       this.setState({
         messages: [...json, ...this.state.messages].sort(
           (a, b) =>
             moment(a.createdAt).valueOf() - moment(b.createdAt).valueOf()
         )
       });
+
+      setTimeout(() => {
+        if (this.messagesEnd) {
+          this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
     });
   }
 
@@ -62,8 +73,10 @@ class Chat extends Component {
     }
   }
 
-  componentDidUpdate() {
-    // this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+  async componentDidUpdate() {
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   handleWrite(e) {
@@ -95,8 +108,28 @@ class Chat extends Component {
     }
   }
 
-  onDrop(files) {
+  verifyFile(files) {
+    if (files && files.length > 0) {
+      const currentFile = files[0];
+      const currentFileSize = currentFile.size;
+      if (currentFileSize > imageMaxSize) {
+        alert(
+          'This file is not allowed. ' + currentFileSize + ' bytes is too large'
+        );
+        return false;
+      }
+      return true;
+    }
+  }
+
+  handleOnDrop(files, rejectedFiles) {
+    if (rejectedFiles && rejectedFiles.length > 0) {
+      this.verifyFile(rejectedFiles);
+    }
+
     if (files.length > 0) {
+      this.setState({ waiting: true });
+
       let formData = new FormData();
       formData.append('file', files[0]);
 
@@ -120,7 +153,8 @@ class Chat extends Component {
             chatMessage: '',
             messages: [...this.state.messages, newMessage].sort(
               (a, b) => a.createdAt - b.createdAt
-            )
+            ),
+            waiting: false
           });
         }
       });
@@ -176,29 +210,54 @@ class Chat extends Component {
                   );
                 else
                   return (
-                    <Message
-                      key={i}
-                      time={v.createdAt}
-                      senderIsMe={v.sender === this.props.user_data._id}
-                      type={v.type}
-                      message={v.message}
-                      image={
-                        v.sender === this.props.user_data._id
-                          ? this.props.user_data.image
-                          : this.props.user_data.contacts_data[v.sender].image
-                      }
-                      firstName={
-                        v.sender === this.props.user_data._id
-                          ? this.props.user_data.firstName
-                          : this.props.user_data.contacts_data[v.sender]
-                              .firstName
-                      }
-                    />
+                    <div>
+                      <Message
+                        key={i}
+                        time={v.createdAt}
+                        senderIsMe={v.sender === this.props.user_data._id}
+                        type={v.type}
+                        message={v.message}
+                        image={
+                          v.sender === this.props.user_data._id
+                            ? this.props.user_data.image
+                            : this.props.user_data.contacts_data[v.sender].image
+                        }
+                        firstName={
+                          v.sender === this.props.user_data._id
+                            ? this.props.user_data.firstName
+                            : this.props.user_data.contacts_data[v.sender]
+                                .firstName
+                        }
+                      />
+                      <div
+                        ref={(el) => {
+                          this.messagesEnd = el;
+                        }}
+                        style={{ float: 'left', clear: 'both' }}
+                      />
+                    </div>
                   );
               })}
             </div>
           </div>
         </div>
+        {this.state.waiting ? (
+          <div className='center'>
+            <div className='preloader-wrapper big active'>
+              <div className='spinner-layer spinner-blue-only'>
+                <div className='circle-clipper left'>
+                  <div className='circle'></div>
+                </div>
+                <div className='gap-patch'>
+                  <div className='circle'></div>
+                </div>
+                <div className='circle-clipper right'>
+                  <div className='circle'></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className='row'>
           <div className='col s12 xl11'>
             <textarea
@@ -216,7 +275,10 @@ class Chat extends Component {
               style={{ margin: '0.5em' }}>
               <i className='material-icons'>send</i>
             </a>
-            <Dropzone onDrop={this.onDrop} multiple={false}>
+            <Dropzone
+              onDrop={this.handleOnDrop}
+              multiple={false}
+              maxSize={imageMaxSize}>
               {({ getRootProps, getInputProps }) => (
                 <span {...getRootProps()}>
                   <input {...getInputProps()} />

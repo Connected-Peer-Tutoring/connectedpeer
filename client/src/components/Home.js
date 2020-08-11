@@ -101,7 +101,6 @@ class Home extends Component {
             </div>
           )}
         />
-        {/* <Route path='*' component={Error404} /> */}
       </div>
     );
   }

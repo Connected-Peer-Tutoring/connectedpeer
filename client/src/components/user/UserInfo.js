@@ -133,6 +133,20 @@ class UserInfo extends Component {
                       {this.state.user_data.bio}
                     </div>
                   </div>
+                  <div>
+                    {this.props.user_data.contacts_data[this.state.userId] ? (
+                      <a
+                        className={'waves-effect btn white blue-text'}
+                        style={{ margin: '0.5em' }}
+                        href={
+                          '/chat/' +
+                          this.props.user_data.contacts_data[this.state.userId]
+                            .chatRoom
+                        }>
+                        Chat<i className='material-icons right'>chat</i>
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <div className='row'>
