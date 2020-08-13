@@ -17,6 +17,8 @@ class TutorSearch extends Component {
   constructor(props) {
     super(props);
 
+    this.handleSelect = this.handleSelect.bind(this);
+
     this.onChangeAvailableStart = this.onChangeAvailableStart.bind(this);
     this.onChangeAvailableEnd = this.onChangeAvailableEnd.bind(this);
     this.onChangeSubjects = this.onChangeSubjects.bind(this);
@@ -34,8 +36,14 @@ class TutorSearch extends Component {
       openErrTime: false,
       openErrTime1: false,
       openErrSubjects: false,
-      tutors: []
+      tutors: [],
+      tutor_data: {},
+      chosenDate: null
     };
+  }
+
+  handleSelect(obj) {
+    this.setState({ tutor_data: obj.tutor_data, chosenDate: obj.chosenDate });
   }
 
   onChangeAvailableStart(e) {
@@ -225,6 +233,9 @@ class TutorSearch extends Component {
             query={this.state.query}
             user_data={this.props.user_data}
             updateState={this.props.updateState}
+            tutor_data={this.state.tutor_data}
+            chosenDate={this.state.chosenDate}
+            setState={this.handleSelect}
           />
         </div>
         <Snackbar

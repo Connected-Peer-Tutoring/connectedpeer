@@ -147,7 +147,12 @@ class TutorResult extends Component {
                         <a
                           className='waves-effect waves-cyan btn-flat btn-small modal-trigger'
                           href='#makeAppointmentModal'
-                          onClick={() => this.setState({ chosenDate: v })}>
+                          onClick={() =>
+                            this.props.setState({
+                              tutor_data: this.state.user_data,
+                              chosenDate: v
+                            })
+                          }>
                           {t.format('h:mm A')}
                         </a>
                       </span>
@@ -166,7 +171,12 @@ class TutorResult extends Component {
                           <a
                             className='waves-effect waves-cyan btn-flat btn-small modal-trigger'
                             href='#makeAppointmentModal'
-                            onClick={() => this.setState({ chosenDate: v })}>
+                            onClick={() =>
+                              this.props.setState({
+                                tutor_data: this.state.user_data,
+                                chosenDate: v
+                              })
+                            }>
                             {t.format('h:mm A')}
                           </a>
                         </span>
@@ -178,7 +188,12 @@ class TutorResult extends Component {
                         <a
                           className='waves-effect waves-cyan btn-flat btn-small modal-trigger'
                           href='#makeAppointmentModal'
-                          onClick={() => this.setState({ chosenDate: v })}>
+                          onClick={() =>
+                            this.props.setState({
+                              tutor_data: this.state.user_data,
+                              chosenDate: v
+                            })
+                          }>
                           {t.format('h:mm A')}
                         </a>
                       </span>
@@ -186,9 +201,9 @@ class TutorResult extends Component {
                 }
               })}
             <MakeAppointment
-              tutor_data={this.state.user_data}
+              tutor_data={this.props.tutor_data}
               user_data={this.props.user_data}
-              appointment_time={this.state.chosenDate}
+              appointment_time={this.props.chosenDate}
               updateState={this.props.updateState}
             />
           </div>

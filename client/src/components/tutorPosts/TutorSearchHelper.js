@@ -35,6 +35,9 @@ export default function TutorSearchHelper(props) {
                   time={props.query.time}
                   user_data={props.user_data}
                   updateState={props.updateState}
+                  tutor_data={props.tutor_data}
+                  chosenDate={props.chosenDate}
+                  setState={props.setState}
                 />
               </div>
             );
@@ -46,6 +49,9 @@ export default function TutorSearchHelper(props) {
                 time={props.query.time}
                 user_data={props.user_data}
                 updateState={props.updateState}
+                tutor_data={props.tutor_data}
+                chosenDate={props.chosenDate}
+                setState={props.setState}
               />
             );
           }
