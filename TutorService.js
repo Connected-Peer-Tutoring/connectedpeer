@@ -87,7 +87,7 @@ async function getTutors(req, res) {
                       .indexOf(req.body.q.time[i] + 1800000)
                   ) {
                     tutorIDs.push(tutor._id);
-                    if (tutorIDs.length >= 16) {
+                    if (tutorIDs.length === 16) {
                       return res.json({ tutorIDs: tutorIDs, hasMore: true });
                     }
                   }
