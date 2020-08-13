@@ -115,7 +115,7 @@ class UserInfo extends Component {
                       );
                     else
                       return (
-                        <span className='secondary-color'>
+                        <span className='secondary-color' key={i}>
                           ,{' '}
                           <a
                             className='waves-effect waves-light'
@@ -169,7 +169,7 @@ class UserInfo extends Component {
                     var t = moment(v).local();
                     if (i === 0) {
                       return (
-                        <span>
+                        <span key={i}>
                           <div className='divider'></div>
                           <h6>Tutor Availability:</h6>
                           <h6 className='primary-color'>
@@ -189,7 +189,7 @@ class UserInfo extends Component {
                       var t0 = moment(ar[i - 1]).local();
                       if (t.format('d') !== t0.format('d')) {
                         return (
-                          <span>
+                          <span key={i}>
                             <div className='divider'></div>
                             <h6 className='primary-color'>
                               {t.format('dddd MMMM Do, YYYY')}
@@ -208,7 +208,7 @@ class UserInfo extends Component {
                         );
                       } else
                         return (
-                          <span>
+                          <span key={i}>
                             <a
                               className='waves-effect waves-cyan btn-flat btn-small modal-trigger'
                               href='#makeAppointmentModal'

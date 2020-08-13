@@ -41,6 +41,7 @@ class ShowAppointment extends Component {
         </div>
       );
     }
+    if (!this.props.appointment[5]) return null;
     return (
       <div className={this.state.tutor ? 'card-panel teal' : 'card-panel cyan'}>
         <div className='row'>

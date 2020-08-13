@@ -132,7 +132,6 @@ function make(req, res) {
               console.log(
                 'There was an error contacting the Calendar service: ' + err
               );
-              return res.json({ success: false });
             }
             // updates appointment informations with google information
             appointment[3] = event.data.id;
@@ -161,7 +160,6 @@ function make(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send(err);
   }
 }
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const TutorTimesSchema = new mongoose.Schema({
   time: {
-    type: Date,
+    type: Number,
     required: true,
     index: true
   },
