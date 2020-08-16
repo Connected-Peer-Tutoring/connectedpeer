@@ -62,7 +62,12 @@ class CancelAppointment extends Component {
         <Snackbar
           open={this.state.openErr}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErr: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -74,7 +79,12 @@ class CancelAppointment extends Component {
         <Snackbar
           open={this.state.openSuccess}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openSuccess: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'

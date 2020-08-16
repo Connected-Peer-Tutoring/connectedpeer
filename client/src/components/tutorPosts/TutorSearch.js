@@ -35,6 +35,7 @@ class TutorSearch extends Component {
       },
       openErrTime: false,
       openErrTime1: false,
+      openErrTime2: false,
       openErrSubjects: false,
       tutors: [],
       tutor_data: {},
@@ -51,6 +52,7 @@ class TutorSearch extends Component {
       availableStart: e,
       openErrTime: false,
       openErrTime1: false,
+      openErrTime2: false,
       openErrSubjects: false
     });
   }
@@ -60,6 +62,7 @@ class TutorSearch extends Component {
       availableEnd: e,
       openErrTime: false,
       openErrTime1: false,
+      openErrTime2: false,
       openErrSubjects: false
     });
   }
@@ -70,6 +73,7 @@ class TutorSearch extends Component {
         subjects: v,
         openErrTime: false,
         openErrTime1: false,
+        openErrTime2: false,
         openErrSubjects: true
       });
     else
@@ -77,6 +81,7 @@ class TutorSearch extends Component {
         subjects: v,
         openErrTime: false,
         openErrTime1: false,
+        openErrTime2: false,
         openErrSubjects: false
       });
   }
@@ -106,6 +111,10 @@ class TutorSearch extends Component {
     } else if (aStart - 86400000 < new Date().valueOf()) {
       this.setState({
         openErrTime1: true
+      });
+    } else if (aEnd - aStart > 21600000) {
+      this.setState({
+        openErrTime2: true
       });
     } else if (this.state.subjects.length > 5) {
       this.setState({
@@ -241,7 +250,12 @@ class TutorSearch extends Component {
         <Snackbar
           open={this.state.openErrTime}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrTime: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -253,7 +267,12 @@ class TutorSearch extends Component {
         <Snackbar
           open={this.state.openErrTime1}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrTime1: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -263,9 +282,31 @@ class TutorSearch extends Component {
           </MuiAlert>
         </Snackbar>
         <Snackbar
+          open={this.state.openErrTime2}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrTime2: false
+            });
+          }}>
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={this.handleClose}
+            severity='error'>
+            Your search time range must less than 6 hours
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar
           open={this.state.openErrSubjects}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrSubjects: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'

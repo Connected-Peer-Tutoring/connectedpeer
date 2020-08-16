@@ -32,6 +32,7 @@ class PostTutor extends Component {
       bio: '',
       openSuccess: false,
       openErrTime: false,
+      openErrTime1: false,
       openErrSubject: false,
       openErrBio: false
     };
@@ -98,6 +99,10 @@ class PostTutor extends Component {
     if (aStart + 3600000 > aEnd) {
       this.setState({
         openErrTime: true
+      });
+    } else if (aEnd - aStart > 28800000) {
+      this.setState({
+        openErrTime1: true
       });
     } else if (
       this.state.subjects.length === 0 &&
@@ -255,7 +260,12 @@ class PostTutor extends Component {
         <Snackbar
           open={this.state.openErrTime}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrTime: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -265,9 +275,31 @@ class PostTutor extends Component {
           </MuiAlert>
         </Snackbar>
         <Snackbar
+          open={this.state.openErrTime1}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrTime1: false
+            });
+          }}>
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={this.handleClose}
+            severity='error'>
+            You can only post up to 8 hours
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar
           open={this.state.openErrSubject}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrSubject: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -279,7 +311,12 @@ class PostTutor extends Component {
         <Snackbar
           open={this.state.openErrBio}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openErrBio: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -291,7 +328,12 @@ class PostTutor extends Component {
         <Snackbar
           open={this.state.openSuccess}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({
+              openSuccess: false
+            });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
