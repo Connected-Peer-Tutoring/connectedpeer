@@ -1,7 +1,9 @@
 const AWS = require('aws-sdk');
 const moment = require('moment');
 
-function postProfileImage(req, res) {
+const UserService = require('./UserService');
+
+async function postProfileImage(req, res) {
   const file = req.file;
   const s3FileURL = process.env.AWS_Uploaded_File_URL_LINK;
 
@@ -25,7 +27,12 @@ function postProfileImage(req, res) {
       res.json({ sucess: false });
     } else {
       req.user.image = s3FileURL + file.originalname;
-      req.user.save();
+      await req.user.save();
+      for (var i = 0; i < req.user.contacts; i++) {
+        User.findById(req.user.contacts[i], (err, user) => {
+          if (user) UserService.updateContactsData(() => {});
+        });
+      }
       res.json({ sucess: true });
     }
   });
