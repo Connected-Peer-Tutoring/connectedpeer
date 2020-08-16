@@ -14,7 +14,7 @@ import {
   image64toCanvasRef
 } from '../fileUtils/imageUtils';
 
-const imageMaxSize = 1000; // bytes
+const imageMaxSize = 5000000; // bytes
 const acceptedFileTypes =
   'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(',').map((item) => {
@@ -44,6 +44,7 @@ class ChangePFP extends Component {
       crop: {
         aspect: 1 / 1
       },
+      openErrFile: false,
       openErr: false,
       openSuccess: false
     };
@@ -54,15 +55,12 @@ class ChangePFP extends Component {
       const currentFile = files[0];
       const currentFileType = currentFile.type;
       const currentFileSize = currentFile.size;
-      console.log(currentFileType);
       if (currentFileSize > imageMaxSize) {
-        alert(
-          'This file is not allowed. ' + currentFileSize + ' bytes is too large'
-        );
+        this.setState({ openErrFile: true });
         return false;
       }
       if (!acceptedFileTypesArray.includes(currentFileType)) {
-        alert('This file is not allowed. Only images are allowed.');
+        this.setState({ openErrFile: true });
         return false;
       }
       return true;
@@ -280,9 +278,27 @@ class ChangePFP extends Component {
           </div>
         </div>
         <Snackbar
+          open={this.state.openErrFile}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({ openErrFile: false });
+          }}>
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={this.handleClose}
+            severity='error'>
+            Only images under 5 mb are accepted
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar
           open={this.state.openErr}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({ openErr: false });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'
@@ -294,7 +310,10 @@ class ChangePFP extends Component {
         <Snackbar
           open={this.state.openSuccess}
           autoHideDuration={6000}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+          onClick={() => {
+            this.setState({ openSuccess: false });
+          }}>
           <MuiAlert
             elevation={6}
             variant='filled'

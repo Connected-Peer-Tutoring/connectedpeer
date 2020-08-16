@@ -28,7 +28,7 @@ class CancelAppointment extends Component {
       if (json.success) this.setState({ openSuccess: true });
       else this.setState({ openErr: true });
     });
-    this.props.updateState();
+    window.location.reload();
   }
 
   render() {

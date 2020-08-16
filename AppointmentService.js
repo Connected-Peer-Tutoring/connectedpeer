@@ -213,7 +213,7 @@ async function cancel(req, res) {
         res.json({ success: true });
         // adds tutor back into end of tutor times for futur tutor search query
         let tutorTime = await TutorTimes.findOne({
-          time: req.body.appointment[0]
+          time: req.body[0]
         });
         tutorTime.push(req.body[2]);
         tutorTime.save();

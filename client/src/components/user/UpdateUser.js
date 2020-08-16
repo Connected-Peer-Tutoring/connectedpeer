@@ -110,7 +110,7 @@ class UpdateUser extends Component {
     });
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     e.preventDefault();
 
     const updatedUser = {
@@ -128,7 +128,7 @@ class UpdateUser extends Component {
         openErr: true
       });
     } else if (this.props.user_data.grade === 0) {
-      api.postUserUpdate(updatedUser);
+      await api.postUserUpdate(updatedUser);
       this.setState({
         openSuccess: true
       });

@@ -22,7 +22,7 @@ function MessageContent(props) {
     else
       return (
         <a href={props.message} target='_blank' rel='noopener noreferrer'>
-          {props.message.substring(76, props.message.length)}
+          {props.message.substring(75, props.message.length)}
         </a>
       );
   }

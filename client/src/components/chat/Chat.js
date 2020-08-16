@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 import Dropzone from 'react-dropzone';
 import moment from 'moment';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import Message from './Message';
 
 import api from '../../api';
@@ -16,14 +18,14 @@ class Chat extends Component {
     this.handleWrite = this.handleWrite.bind(this);
     this.submitChatMessage = this.submitChatMessage.bind(this);
 
-    this.verifyFile = this.verifyFile.bind(this);
     this.handleOnDrop = this.handleOnDrop.bind(this);
 
     this.state = {
       roomId: null,
       chatMessage: '',
       messages: [],
-      waiting: false
+      waiting: false,
+      openErrFile: false
     };
   }
 
@@ -103,28 +105,15 @@ class Chat extends Component {
         chatMessage: '',
         messages: [...this.state.messages, newMessage].sort(
           (a, b) => a.createdAt - b.createdAt
-        )
+        ),
+        openErrFile: false
       });
-    }
-  }
-
-  verifyFile(files) {
-    if (files && files.length > 0) {
-      const currentFile = files[0];
-      const currentFileSize = currentFile.size;
-      if (currentFileSize > imageMaxSize) {
-        alert(
-          'This file is not allowed. ' + currentFileSize + ' bytes is too large'
-        );
-        return false;
-      }
-      return true;
     }
   }
 
   handleOnDrop(files, rejectedFiles) {
     if (rejectedFiles && rejectedFiles.length > 0) {
-      this.verifyFile(rejectedFiles);
+      this.setState({ openErrFile: true });
     }
 
     if (files.length > 0) {
@@ -154,7 +143,8 @@ class Chat extends Component {
             messages: [...this.state.messages, newMessage].sort(
               (a, b) => a.createdAt - b.createdAt
             ),
-            waiting: false
+            waiting: false,
+            openErrFile: false
           });
         }
       });
@@ -291,6 +281,23 @@ class Chat extends Component {
             </Dropzone>
           </div>
         </div>
+        <Snackbar
+          open={this.state.openErrFile}
+          onClick={() => {
+            this.setState({
+              openErrFile: false
+            });
+          }}
+          autoHideDuration={6000}
+          onClose={this.handleClose}>
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={this.handleClose}
+            severity='error'>
+            Only files under 10 mb are accepted
+          </MuiAlert>
+        </Snackbar>
       </div>
     );
   }

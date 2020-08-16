@@ -43,7 +43,7 @@ async function getTutors(req, res) {
     var i = 0;
     var t = 0;
 
-    while (tutorIDs.length < 16) {
+    while (tutorIDs.length < 8) {
       if (i === req.body.q.time.length) {
         return res.json({ tutorIDs: tutorIDs, hasMore: false });
       }
@@ -51,14 +51,14 @@ async function getTutors(req, res) {
       let tutorTime = await TutorTimes.findOne({ time: req.body.q.time[i] });
 
       if (tutorTime) {
-        if (req.body.page * 16 >= t + tutorTime.tutors.length) {
+        if (req.body.page * 8 >= t + tutorTime.tutors.length) {
           i++;
           t = t + tutorTime.tutors.length;
           continue;
         } else {
           tutors = tutorTime.tutors;
           for (
-            var j = req.body.page * 16 - t;
+            var j = req.body.page * 8 - t;
             j < tutorTime.tutors.length;
             j++
           ) {
@@ -87,7 +87,7 @@ async function getTutors(req, res) {
                       .indexOf(req.body.q.time[i] + 1800000)
                   ) {
                     tutorIDs.push(tutor._id);
-                    if (tutorIDs.length === 16) {
+                    if (tutorIDs.length === 8) {
                       return res.json({ tutorIDs: tutorIDs, hasMore: true });
                     }
                   }

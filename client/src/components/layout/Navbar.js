@@ -5,7 +5,7 @@ class Navbar extends Component {
   render() {
     return (
       <nav className='primary-color-background'>
-        <div className='nav-wrapper container'>
+        <div className='nav-wrapper'>
           <a href='/' className='brand-logo center'>
             ConnectedPeer
           </a>
