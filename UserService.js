@@ -219,6 +219,7 @@ function update(req, res) {
         if (user) updateContactsData(user, () => {});
       });
     }
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
     res.status(500).send(err);

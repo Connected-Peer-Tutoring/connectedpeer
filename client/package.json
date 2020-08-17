@@ -22,7 +22,7 @@
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "start": "react-scripts start",

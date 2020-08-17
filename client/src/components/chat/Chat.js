@@ -61,7 +61,7 @@ class Chat extends Component {
       );
 
       this.socket.on('accessDenied', (messageFromServer) => {
-        window.location.href = '/chat';
+        window.location.href = '/';
       });
 
       this.socket.on('newMessage', (messageFromServer) => {
