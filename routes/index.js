@@ -10,12 +10,7 @@ const FileUploadService = require('../FileUploadService');
 
 // returns logged_in boolean
 router.get('/', async (req, res) => {
-  try {
-    res.json(req.isAuthenticated());
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
+  res.json(req.isAuthenticated());
 });
 
 // returns user data

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import api from '../../api';
 
+import './BackgroundVideo.css';
+
 class Login extends Component {
   constructor() {
     super();
@@ -26,6 +28,14 @@ class Login extends Component {
             </a>
           </div>
         </nav>
+        <div class='video-background'>
+          <div class='video-foreground'>
+            <iframe
+              src='https://www.youtube.com/embed/tGTvMVjX3Eo?start=7&autoplay=1&mute=1&controls=0&rel=0&loop=1&list=PLnV3b5c0KJlq_xTir5-P7LnFAQcuSnPaV'
+              title='ConnectedPeer Promo'
+              frameborder='0'></iframe>
+          </div>
+        </div>
         <div className='row section'>
           <div className='col s12 m6 offset-m3 xl4 offset-xl4'>
             <div className='card'>

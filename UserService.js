@@ -21,16 +21,16 @@ async function get(req, res) {
         if (userA[0][0] < new Date().getTime() - 3600000) {
           if (userA[0][2] === req.user._id.toString()) req.user.hours++;
           userPA.splice(0, 0, userA.shift());
+        } else if (
+          userTA.length < req.user.tutorAvailability.length ||
+          userA.length < req.user.appointments.length
+        ) {
+          req.user.tutorAvailability = userTA;
+          req.user.appointments = userA;
+          req.user.pastAppointments = userPA;
+          req.user.save();
+          break;
         } else break;
-      }
-      if (
-        userTA.length < req.user.tutorAvailability.length ||
-        userA.length < req.user.appointments.length
-      ) {
-        req.user.tutorAvailability = userTA;
-        req.user.appointments = userA;
-        req.user.pastAppointments = userPA;
-        req.user.save();
       }
       // sends user_data as json
       var user_data = {

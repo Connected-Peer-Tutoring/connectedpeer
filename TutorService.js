@@ -30,6 +30,7 @@ async function post(req, res) {
         tutorTime.save();
       }
     }
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
